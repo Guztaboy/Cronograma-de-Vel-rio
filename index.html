@@ -17,8 +17,8 @@
     <!-- cont full -->
     <div id="content">
       <h1>Informativo de Velórios</h1>
-      
-       <!-- table -->
+
+      <!-- table -->
       <table id="editableTable">
         <thead>
           <tr>
@@ -162,15 +162,15 @@
           dados.forEach((rowData) => {
             const row = document.createElement("tr");
             row.innerHTML = `
-              <td>${rowData.cemiterio}</td>
-              <td>${rowData.nome}</td>
-              <td>${rowData.dataVelorio}</td>
-              <td>${rowData.inicioVelorio}</td>
-              <td>${rowData.fimVelorio}</td>
-              <td>${rowData.sala}</td>
-              <td>${rowData.sepultamento}</td>
-              <td>${rowData.destino}</td>
-            `;
+                        <td>${rowData.cemiterio}</td>
+                        <td>${rowData.nome}</td>
+                        <td>${rowData.dataVelorio}</td>
+                        <td>${rowData.inicioVelorio}</td>
+                        <td>${rowData.fimVelorio}</td>
+                        <td>${rowData.sala}</td>
+                        <td>${rowData.sepultamento}</td>
+                        <td>${rowData.destino}</td>
+                    `;
             tbody.appendChild(row);
           });
         }
@@ -249,17 +249,14 @@
       alternar();
       setInterval(alternar, tempoExibicao * 2);
 
-      // Verifica alterações no LocalStorage a cada 5 segundos
-      let ultimosDados = localStorage.getItem("tabelaDados");
-
       function verificarAtualizacoes() {
         const dadosAtuais = localStorage.getItem("tabelaDados");
-        if (dadosAtuais !== ultimosDados) {
-          ultimosDados = dadosAtuais;
+        if (dadosAtuais !== JSON.stringify(dadosSalvos)) {
           carregarDados(); // Atualiza a tabela
         }
       }
 
+      // Verifica alterações a cada 5 segundos
       setInterval(verificarAtualizacoes, 5000);
     </script>
   </body>
