@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Informativo de Velórios</title>
+    <link rel="shortcut icon" href="passaro.svg" type="image/x-icon" />
+  </head>
+  <body>
+    <!-- cont full -->
+    <div id="content">
+      <h1>Informativo de Velórios</h1>
+
+      <!-- table -->
+      <table id="editableTable">
+        <thead>
+          <tr>
+            <!-- Cabeçalhos serão preenchidos dinamicamente -->
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Linhas serão preenchidas dinamicamente -->
+        </tbody>
+      </table>
+
+      <!-- imgs -->
+      <div class="logo-background">
+        <img src="logocortel.svg" alt="Logo" />
+      </div>
+      <div class="logo-background2">
+        <img src="passaro.svg" alt="Logo" />
+      </div>
+      <div class="logo-background3">
+        <img src="prefeitura.svg" alt="" />
+      </div>
+    </div>
+
+    <!-- vídeo -->
+    <div id="video-container">
+      <video id="video" loop muted autoplay>
+        <source src="video1.mp4" type="video/mp4" />
+        Seu navegador não suporta a execução do vídeo.
+      </video>
+    </div>
+
+    <script>
+      // planilha
+      const sheetUrl =
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vS8V9yKhcXFmU4CEVewoONYMjImZKkm7tpe4tGsGEl6tpRDu7-dwUWrFEUXHt-2PkKUbgum3mllsdS6/pub?output=csv";
+
+      // carrega planilha
+      async function loadSheetData() {
+        try {
+          const response = await fetch(sheetUrl);
+          const csvData = await response.text();
+
+          // csv to array
+          const rows = csvData.split("\n");
+          const headers = rows[0].split(",");
+
+          // clean before up
+          const table = document.getElementById("editableTable");
+          table.innerHTML = "";
+
+          // cabeçalhos
+          const thead = document.createElement("thead");
+          const headerRow = document.createElement("tr");
+          headers.forEach((header) => {
+            const th = document.createElement("th");
+            th.textContent = header.trim();
+            headerRow.appendChild(th);
+          });
+          thead.appendChild(headerRow);
+          table.appendChild(thead);
+
+          // add line
+          const tbody = document.createElement("tbody");
+          for (let i = 1; i < rows.length; i++) {
+            const cells = rows[i].split(",");
+            const row = document.createElement("tr");
+            cells.forEach((cell) => {
+              const td = document.createElement("td");
+              td.textContent = cell.trim();
+              row.appendChild(td);
+            });
+            tbody.appendChild(row);
+          }
+          table.appendChild(tbody);
+        } catch (error) {
+          console.error("Erro ao carregar os dados da planilha:", error);
+        }
+      }
+
+      // load data on the page
+      window.onload = () => {
+        loadSheetData(); // Carrega os dados imediatamente
+        setInterval(loadSheetData, 30000); // Atualiza a cada 1 minuto (60.000 ms)
+      };
+    </script>
+
+    <script>
+      const tempoExibicao = 60000;
+      let isEditing = false;
+
+      function alternar() {
+        if (isEditing) return; // se editando
+
+        const content = document.getElementById("content");
+        const videoContainer = document.getElementById("video-container");
+        const video = document.getElementById("video");
+
+        // exibe a pagina e oculta o video
+        content.style.display = "block";
+        videoContainer.style.display = "none";
+        video.pause();
+
+        // vice-versa
+        setTimeout(() => {
+          if (!isEditing) {
+            // verifica
+            content.style.display = "none";
+            videoContainer.style.display = "block";
+            video.play();
+          }
+        }, tempoExibicao);
+      }
+
+
+      // alternar
+      alternar();
+      setInterval(alternar, tempoExibicao * 2);
+    </script>
+  </body>
+</html>
